@@ -1,4 +1,4 @@
-import { View, Text, SafeAreaView, ScrollView, Image, TextInput, Pressable, TouchableOpacity } from 'react-native'
+import { View, RefreshControl, Text, SafeAreaView, ScrollView, Image, TextInput, Pressable, TouchableOpacity } from 'react-native'
 import React, { useContext, useEffect, useLayoutEffect, useState } from 'react'
 import Header from './Header'
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -24,14 +24,25 @@ const FindPeople = ({ navigation }) => {
             console.log('Error Occured At Friend Req :- ' + error.message);
         }
     }
-
+    const [refreshing, setRefreshing] = React.useState(false);
     useLayoutEffect(() => {
         checkKey();
     }, [])
+    const onRefresh = React.useCallback(() => {
+        setRefreshing(true);
+        setTimeout(() => {
+            setRefreshing(false);
+        }, 2000);
+    }, []);
     return (
         <>
             <Header />
-            <SafeAreaView className="flex flex-1 bg-gray-800 px-2">
+            <SafeAreaView
+                refreshControl={
+                    <RefreshControl
+                        refreshing={refreshing} onRefresh={onRefresh} />
+                }
+                className="flex flex-1 bg-gray-800 px-2" >
                 <View>
                     <TextInput
                         value={search}
@@ -49,7 +60,7 @@ const FindPeople = ({ navigation }) => {
                         })
                     }
                 </ScrollView>
-            </SafeAreaView>
+            </SafeAreaView >
         </>
     )
 }
@@ -66,7 +77,7 @@ const SingleFriendRequestComponent = ({ item, navigation }) => {
                 />
                 <View className="pl-3 items-start justify-between gap-y-1">
                     <Text className="text-white text-base font-semibold">{item?.name}</Text>
-                    <Text className="text-gray-400 text-sm">{item?.email}</Text>
+                    <Text className="text-gray-400 text-sm">{item?.email.length > 20 ? item?.email?.substr(0, 20) + "..." : item?.email}</Text>
                 </View>
             </View>
             <View>

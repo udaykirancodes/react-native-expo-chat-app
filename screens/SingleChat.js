@@ -18,7 +18,7 @@ const SingleChat = ({ route, navigation }) => {
     const [messages, setMessages] = useState([]);
     const [msg, setMsg] = useState('');
     const [loading, setLoading] = useState(false);
-    const { user, onlineUsers, setOnlineUsers } = useContext(AppContext);
+    const { user, onlineUsers, fetchConversations, setOnlineUsers } = useContext(AppContext);
 
     const [typingState, setTypingState] = useState(false);
 
@@ -111,6 +111,10 @@ const SingleChat = ({ route, navigation }) => {
         setMsg(m);
         socket.emit('typing', { receiverId: chatUser._id });
     }
+    const goToBack = () => {
+        fetchConversations();
+        navigation.goBack()
+    }
     return (
         <KeyboardAvoidingView
             keyboardShouldPersistTaps={true}
@@ -118,7 +122,7 @@ const SingleChat = ({ route, navigation }) => {
             className="relative flex flex-1 bg-gray-800 pb-14">
             <View className="px-2 py-2 bg-gray-900 flex-row">
                 <View className="flex flex-row items-center">
-                    <Pressable onPress={() => navigation.goBack()} className="flex-row">
+                    <Pressable onPress={goToBack} className="flex-row">
                         <View className="items-center justify-center pr-2">
                             <AntDesign name="arrowleft" size={28} color="white" />
                         </View>
@@ -172,6 +176,22 @@ const SingleChat = ({ route, navigation }) => {
                             </View>
                         </View>
                     })
+                }
+                {
+                    typingState &&
+                    <View
+                        className="h-auto my-2 text-base flex-row items-center justify-start"
+                    >
+                        <TouchableOpacity>
+                            <Image
+                                className="h-6 w-6 rounded-full mr-2"
+                                source={{ uri: axios.defaults.baseURL + chatUser.image }}
+                            />
+                        </TouchableOpacity>
+                        <View className="w-72 items-center justify-center">
+                            <Text numberOfLines={10} multiline={true} className="relative w-auto font-bold py-2 mr-auto text-white rounded-3xl">{'Typing...'}</Text>
+                        </View>
+                    </View>
                 }
             </ScrollView>
             {/* Message Sending View */}

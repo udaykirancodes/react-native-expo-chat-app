@@ -11,7 +11,7 @@ import axios from 'axios';
 const Profile = ({ navigation }) => {
     const { user, setUser } = useContext(AppContext);
     const [loading, setLoading] = useState(false);
-    const [name, setName] = useState('');
+    const [name, setName] = useState(user?.name);
 
     const checkKey = async () => {
         try {
@@ -94,7 +94,7 @@ const Profile = ({ navigation }) => {
                     onPress={handleDocumentSelection}
                     className="flex items-end">
                     <Image
-                        source={fileResponse ? fileResponse : { uri: axios.defaults.baseURL + user.image }}
+                        source={fileResponse ? fileResponse : { uri: axios.defaults.baseURL + user?.image }}
                         className="h-24 w-24 rounded-full"
                     />
                     <AntDesign name="pluscircle" size={24} color="gray" />

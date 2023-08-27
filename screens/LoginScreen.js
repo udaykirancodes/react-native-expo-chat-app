@@ -4,13 +4,15 @@ import { Alert } from 'react-native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AppContext } from '../context/AppContext';
+import SocketContext from '../context/SocketContext';
+import { io } from 'socket.io-client';
 const LoginScreen = ({ navigation }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
 
     const { setUser } = useContext(AppContext);
-
+    const { socket } = useContext(SocketContext);
     const saveToken = async (token) => {
         try {
             await AsyncStorage.setItem('authToken', token);
@@ -46,6 +48,7 @@ const LoginScreen = ({ navigation }) => {
             }, { validateStatus: false }, headers)
             console.log(data)
             if (data.success) {
+                socket.emit('addUser', data.user._id);
                 saveToken(data.authToken);
                 saveUser(data.user);
                 setUser(data.user);
@@ -71,7 +74,6 @@ const LoginScreen = ({ navigation }) => {
                         </View>
                         <View className="w-full h-12">
                             <TextInput
-                                autoCapitalize={false}
                                 value={email}
                                 onChangeText={(text) => setEmail(text)}
                                 className="bg-red-100 rounded-md h-full pl-3 text-md text-gray-900"
@@ -81,7 +83,6 @@ const LoginScreen = ({ navigation }) => {
                         <View className="w-full h-12">
                             <TextInput
                                 value={password}
-                                autoCapitalize={false}
                                 onChangeText={(text) => setPassword(text)}
                                 secureTextEntry={true}
                                 className="bg-red-100 h-full w-full rounded-md  pl-3 text-md text-gray-900"

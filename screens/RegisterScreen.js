@@ -1,13 +1,16 @@
 import { View, Text, Alert, KeyboardAvoidingView, SafeAreaView, TextInput, Pressable, TouchableOpacity } from 'react-native'
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { AppContext } from '../context/AppContext';
+import SocketContext from '../context/SocketContext';
 const RegisterScreen = ({ navigation }) => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
-
+    const { setUser } = useContext(AppContext);
+    const { socket } = useContext(SocketContext);
     const saveToken = async (token) => {
         try {
             await AsyncStorage.setItem('authToken', token);
@@ -47,6 +50,7 @@ const RegisterScreen = ({ navigation }) => {
                 saveToken(data.authToken);
                 saveUser(data.user);
                 setUser(data.user);
+                socket.emit('addUser', data.user._id);
                 navigation.navigate('Home');
             }
         } catch (error) {

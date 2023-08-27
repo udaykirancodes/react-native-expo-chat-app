@@ -1,15 +1,16 @@
-import { View, Text, SafeAreaView, ScrollView, Image, TextInput, Pressable, Touchable, TouchableOpacity } from 'react-native'
-import React, { useState, useEffect, useContext } from 'react'
+import { View, Text, SafeAreaView, RefreshControl, ScrollView, Image, TextInput, Pressable, Touchable, TouchableOpacity } from 'react-native'
+import React, { useState, useEffect, useContext, useLayoutEffect } from 'react'
 import Header from './Header'
 import { AppContext } from '../context/AppContext'
 import axios from 'axios';
 import SocketContext from '../context/SocketContext';
-const Chats = ({ navigation }) => {
+const Chats = ({ navigation, route }) => {
     const { user } = useContext(AppContext);
     const [search, setSearch] = useState('');
-    const { conversations, onlineUsers, setOnlineUsers, setConversations, fetchConversations } = useContext(AppContext);
+    const { conversations, refreshing, setRefreshing, onlineUsers, setOnlineUsers, setConversations, fetchConversations } = useContext(AppContext);
     let socket = useContext(SocketContext);
     useEffect(() => {
+        console.log('useEffect')
         socket.on('connection', () => console.log('+'))
         socket.emit('addUser', user._id);
         socket.on('getUsers', (data) => {
@@ -20,12 +21,22 @@ const Chats = ({ navigation }) => {
             socket.off('connection');
             socket.off('getUsers');
         })
-    }, [user._id])
+    }, [user._id, route])
+
+
+
     return (
         <>
             <Header />
             <SafeAreaView className="flex flex-1 bg-gray-800 px-2">
-                <ScrollView showsVerticalScrollIndicator={false} className="flex flex-1 flex-col">
+                <ScrollView
+
+                    refreshControl={
+                        <RefreshControl
+                            refreshing={refreshing} onRefresh={() => fetchConversations()} />
+                    }
+
+                    showsVerticalScrollIndicator={false} className="flex flex-1 flex-col">
                     <View className="h-32">
                         <Text className="text-xs text-green-400 mt-3">View Online Users!</Text>
                         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} className="my-2 flex  w-full">
@@ -102,16 +113,28 @@ const SingleFriendRequestComponent = ({ search, item, navigation }) => {
         })
     }
     return (
-        <TouchableOpacity onPress={openChat} className="flex mb-3 items-center flex-row justify-between px-1">
+        <TouchableOpacity onPress={openChat} className="relative flex mb-3 items-center flex-row justify-between px-1">
             <View className="flex flex-row items-center justify-start">
                 <Image
                     className="h-12 w-12 rounded-full"
                     source={{ uri: axios.defaults.baseURL + cur?.image }}
                 />
-                <View className="pl-3 items-start justify-between">
+                <View className="pl-3 items-start justify-between w-full">
                     <Text className="text-white text-base">{cur.name}</Text>
-                    <Text className="text-blue-400 text-base">{"Hi,Uday!"}</Text>
+                    {
+                        item?.lastMessage ?
+                            item?.lastMessage?.seen ?
+                                <Text className="text-blue-400 text-base">{item?.lastMessage?.message}</Text>
+                                :
+                                <Text className="text-blue-400 font-bold text-base">{item?.lastMessage?.message}</Text>
+                            :
+                            <Text className="text-blue-400 text-base">{'click here & start chatting'}</Text>
+                    }
                 </View>
+                {
+                    !item?.lastMessage?.seen &&
+                    <View className="absolute right-20 rounded-full bg-white h-2 w-2"></View>
+                }
             </View>
         </TouchableOpacity>
     )

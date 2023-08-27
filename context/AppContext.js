@@ -15,10 +15,10 @@ const AppContextProvider = ({ children }) => {
         sentFriendRequests: [],
         friendRequests: []
     })
-    let socket = null;
     const [onlineUsers, setOnlineUsers] = useState([]);
     const [conversations, setConversations] = useState([]);
     const [friendRequests, setFriendRequests] = useState([])
+    const [refreshing, setRefreshing] = useState(false);
     // Fetch User
     const fetchUser = async () => {
         try {
@@ -116,6 +116,8 @@ const AppContextProvider = ({ children }) => {
         }
     }
     const fetchConversations = async () => {
+        console.log('convo fetching')
+        setRefreshing(true);
         try {
             let token = await AsyncStorage.getItem('authToken');
             if (!token) {
@@ -130,12 +132,15 @@ const AppContextProvider = ({ children }) => {
                 console.log('Conversations : ' + data.data.length);
                 setConversations(data.data);
             }
+            setRefreshing(false);
         } catch (error) {
+            setRefreshing(false);
             console.log('Error Occured At Fetch Convo :- ' + error.message);
         }
+        setRefreshing(false);
     }
     return (
-        <AppContext.Provider value={{ socket, user, setUser, friendRequests, conversations, setConversations, fetchConversations, setFriendRequests, fetchUser, fetchFriendRequests, acceptFriendRequest, sendFriendRequest, onlineUsers, setOnlineUsers }}>
+        <AppContext.Provider value={{ user, setUser, friendRequests, conversations, setConversations, refreshing, setRefreshing, fetchConversations, setFriendRequests, fetchUser, fetchFriendRequests, acceptFriendRequest, sendFriendRequest, onlineUsers, setOnlineUsers }}>
             {children}
         </AppContext.Provider>
     )

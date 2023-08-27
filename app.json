@@ -1,10 +1,11 @@
 {
   "expo": {
-    "name": "app",
-    "slug": "app",
+    "name": "Chat App by Uday",
+    "slug": "chat-app-by-uday",
+    "description": "Create Account - Chat with Friends!",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/uday.jpg",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
@@ -33,6 +34,18 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "4f1a151a-eeeb-4cea-b5e0-f90b48d2bf68"
+      }
+    },
+    "owner": "udaykirancodes",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/4f1a151a-eeeb-4cea-b5e0-f90b48d2bf68"
     }
   }
 }

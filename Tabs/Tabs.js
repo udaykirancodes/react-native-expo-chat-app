@@ -20,12 +20,14 @@ import LoginScreen from '../screens/LoginScreen';
 import RegisterScreen from '../screens/RegisterScreen';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { AppContextProvider } from '../context/AppContext';
+import Extra from '../screens/Extra';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 // Bottom Tab
 const BottomTabs = () => {
     const Tab = createBottomTabNavigator();
     return (
         <Tab.Navigator
-            initialRouteName='Chats'
+            initialRouteName='Profile'
             screenOptions={{
                 tabBarStyle: {
                     backgroundColor: '#222',
@@ -46,6 +48,14 @@ const BottomTabs = () => {
                 }}
                 component={FriendRequests}
             />
+            {/* <Tab.Screen
+                name="Extra"
+                options={{
+                    headerShown: false,
+                    tabBarIcon: ({ focused }) => focused ? <Ionicons name="notifications-circle" size={24} color="white" /> : <Ionicons name="notifications-circle-outline" size={24} color="white" />
+                }}
+                component={Extra}
+            /> */}
             <Tab.Screen
                 name="Find"
                 options={({ navigation, route }) => ({
