@@ -8,8 +8,8 @@ import SocketContext from './context/SocketContext';
 let socket = null;
 
 export default function App() {
-  // axios.defaults.baseURL = 'https://expo-chat-app-backend.onrender.com';
-  axios.defaults.baseURL = 'http://192.168.1.2:9000';
+  axios.defaults.baseURL = 'https://expo-chat-app-backend.onrender.com';
+  // axios.defaults.baseURL = 'http://192.168.1.2:9000';
   axios.defaults.headers = {
     'Content-Type': 'application/json',
   }
