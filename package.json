@@ -27,7 +27,8 @@
     "react-native-vector-icons": "^10.0.0",
     "socket.io-client": "^4.7.2",
     "timeago.js": "^4.0.2",
-    "expo-updates": "~0.18.12"
+    "expo-updates": "~0.18.12",
+    "expo-dev-client": "~2.4.8"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

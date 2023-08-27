@@ -8,7 +8,7 @@
     "icon": "./assets/uday.jpg",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/uday.jpg",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -28,9 +28,10 @@
     ],
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/uday.jpg",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.udaykirancodes.chatappbyuday"
     },
     "web": {
       "favicon": "./assets/favicon.png"
