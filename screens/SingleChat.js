@@ -60,10 +60,31 @@ const SingleChat = ({ route, navigation }) => {
             let { data } = await axios(options);
             if (data.success) {
                 setMessages(data.data);
+                MarkAsRead();
                 setMsg('');
+                MarkAsRead();
             }
         } catch (error) {
             console.log('Error Occured At Fetch Convo :- ' + error);
+        }
+    }
+    const MarkAsRead = async () => {
+        try {
+            let token = await AsyncStorage.getItem('authToken');
+            if (!token) {
+                navigation.replace('Login');
+                return;
+            }
+            let options = {
+                method: 'POST',
+                url: `/chat/mark-read/${conversationId}`,
+                headers: {
+                    'authToken': token
+                },
+            }
+            await axios(options);
+        } catch (error) {
+            console.log('Error Occured At Mark Read :- ' + error);
         }
     }
     const sendMessage = async () => {

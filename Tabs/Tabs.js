@@ -20,14 +20,13 @@ import LoginScreen from '../screens/LoginScreen';
 import RegisterScreen from '../screens/RegisterScreen';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { AppContextProvider } from '../context/AppContext';
-import Extra from '../screens/Extra';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 // Bottom Tab
 const BottomTabs = () => {
     const Tab = createBottomTabNavigator();
     return (
         <Tab.Navigator
-            initialRouteName='Profile'
+            initialRouteName='Chats'
             screenOptions={{
                 tabBarStyle: {
                     backgroundColor: '#222',

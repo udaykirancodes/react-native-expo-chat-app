@@ -8,11 +8,15 @@ import { Alert } from 'react-native';
 import { AppContext } from '../context/AppContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import SocketContext from '../context/SocketContext';
 const Profile = ({ navigation }) => {
     const { user, setUser } = useContext(AppContext);
     const [loading, setLoading] = useState(false);
     const [name, setName] = useState(user?.name);
-
+    let socket = useContext(SocketContext);
+    useEffect(() => {
+        setName(user.name);
+    }, [])
     const checkKey = async () => {
         try {
             let token = await AsyncStorage.getItem('authToken');
@@ -27,6 +31,7 @@ const Profile = ({ navigation }) => {
     }
     const LogOut = async () => {
         try {
+            socket.emit('removeUser', user?._id);
             await AsyncStorage.removeItem('user');
             await AsyncStorage.removeItem('authToken');
             navigation.replace('Login')

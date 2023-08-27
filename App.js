@@ -9,16 +9,16 @@ let socket = null;
 
 export default function App() {
   // axios.defaults.baseURL = 'https://expo-chat-app-backend.onrender.com';
-  axios.defaults.baseURL = 'http://192.168.227.98:9000';
+  axios.defaults.baseURL = 'http://192.168.1.2:9000';
   axios.defaults.headers = {
     'Content-Type': 'application/json',
   }
   socket = io(axios.defaults.baseURL);
-  useEffect(() => {
-    return () => {
-      socket.close();
-    }
-  }, []);
+  // useEffect(() => {
+  //   return () => {
+  //     socket.close();
+  //   }
+  // }, []);
   return (
     <SocketContext.Provider value={socket}>
       <SafeAreaView className="flex flex-1 bg-gray-800">

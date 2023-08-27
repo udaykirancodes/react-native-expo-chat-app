@@ -4,15 +4,23 @@ import Header from './Header'
 import { AppContext } from '../context/AppContext'
 import axios from 'axios';
 import SocketContext from '../context/SocketContext';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const Chats = ({ navigation, route }) => {
     const { user } = useContext(AppContext);
     const [search, setSearch] = useState('');
     const { conversations, refreshing, setRefreshing, onlineUsers, setOnlineUsers, setConversations, fetchConversations } = useContext(AppContext);
     let socket = useContext(SocketContext);
+    const checkKey = async () => {
+        let token = await AsyncStorage.getItem('authToken');
+        if (token == null) {
+            navigation.navigate('Login');
+        }
+    }
     useEffect(() => {
+        checkKey();
         console.log('useEffect')
         socket.on('connection', () => console.log('+'))
-        socket.emit('addUser', user._id);
+        socket.emit('addUser', user?._id);
         socket.on('getUsers', (data) => {
             setOnlineUsers(data);
         })
@@ -21,7 +29,7 @@ const Chats = ({ navigation, route }) => {
             socket.off('connection');
             socket.off('getUsers');
         })
-    }, [user._id, route])
+    }, [user?._id])
 
 
 
@@ -33,6 +41,7 @@ const Chats = ({ navigation, route }) => {
 
                     refreshControl={
                         <RefreshControl
+                            colors={['indigo', 'blue']}
                             refreshing={refreshing} onRefresh={() => fetchConversations()} />
                     }
 
